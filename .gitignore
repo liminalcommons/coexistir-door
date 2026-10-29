@@ -1,0 +1,29 @@
+# Secrets — never commit real credentials
+.env
+.env.*
+!.env.example
+
+# Deps / build
+node_modules/
+dist/
+packages/*/dist/
+packages/*/lib/
+coverage/
+
+# Logs / OS
+*.log
+.DS_Store
+
+# Live2D model payloads are NOT redistributable under the Live2D Free
+# Material License: raw .moc3 + textures must be filled locally via
+# scripts/live2d/sync-live2d-assets.mjs — they must never be committed.
+*.moc3
+**/Mao.2048/
+**/texture_*.png
+packages/client/public/live2d/models/
+
+# Door probe artifacts (regenerated on the rig that runs the gate)
+packages/client/scripts/door/clips/*.wav
+
+# Local tooling noise
+nul

@@ -1,0 +1,3 @@
+# Audio clips and probe output are rig artifacts, not source: several MB of WAV
+# per shape, regenerated on the rig that runs the gate.
+*.wav

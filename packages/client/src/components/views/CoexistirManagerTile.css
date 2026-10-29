@@ -1,0 +1,231 @@
+/**
+ * CoexistirManagerTile — the pinned front-door card.
+ *
+ * Sits above the meeting tiles but below modals; bottom-left on desktop, a
+ * full-width strip-safe card on narrow screens. Dark card borrowed from the
+ * pinned-overlay language so it reads as "the agent's tile", not a toast.
+ */
+
+.coexistir-manager {
+  position: fixed;
+  left: 16px;
+  bottom: 96px;
+  z-index: 9000;
+  width: min(340px, calc(100vw - 32px));
+  max-height: min(46vh, 400px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 12px 10px;
+  box-sizing: border-box;
+  background: color-mix(in srgb, var(--theme-bg-dark, #14121a) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--theme-primary, #c9a227) 34%, transparent);
+  border-radius: 14px;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, 0.45);
+  color: var(--theme-text-primary, #e8e2d6);
+  font-size: 0.85rem;
+  line-height: 1.45;
+  backdrop-filter: blur(6px);
+}
+
+.coexistir-manager__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.coexistir-manager__avatar {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #14121a;
+  background: linear-gradient(160deg, var(--theme-primary, #c9a227), #8f6f1d);
+}
+
+.coexistir-manager__id {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.coexistir-manager__name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+.coexistir-manager__role {
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+}
+
+.coexistir-manager__spacer {
+  flex: 1 1 auto;
+}
+
+.coexistir-manager__icon {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--theme-primary, #c9a227) 26%, transparent);
+  background: transparent;
+  color: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.coexistir-manager__icon:hover:not(:disabled) {
+  opacity: 1;
+  background: color-mix(in srgb, var(--theme-primary, #c9a227) 14%, transparent);
+}
+
+.coexistir-manager__icon:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.coexistir-manager__body {
+  overflow-y: auto;
+  flex: 0 1 auto;
+  min-height: 1.4em;
+  font-size: 0.86rem;
+}
+
+.coexistir-manager__error {
+  color: #ffb4a8;
+  font-size: 0.76rem;
+}
+
+.coexistir-manager__tasks {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0 0;
+  border-top: 1px solid color-mix(in srgb, var(--theme-primary, #c9a227) 16%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow-y: auto;
+  font-size: 0.78rem;
+}
+
+.coexistir-manager__task {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+  opacity: 0.9;
+}
+
+.coexistir-manager__task-dot {
+  color: var(--theme-primary, #c9a227);
+  font-size: 0.7rem;
+}
+
+.coexistir-manager__task--more {
+  opacity: 0.55;
+  font-style: italic;
+}
+
+.coexistir-manager__actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.coexistir-manager__action {
+  flex: 1 1 auto;
+  padding: 5px 8px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--theme-primary, #c9a227) 30%, transparent);
+  background: color-mix(in srgb, var(--theme-primary, #c9a227) 10%, transparent);
+  color: inherit;
+  font-size: 0.74rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.coexistir-manager__action:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--theme-primary, #c9a227) 20%, transparent);
+}
+
+.coexistir-manager__action--active {
+  border-color: color-mix(in srgb, var(--theme-primary, #c9a227) 70%, transparent);
+  background: color-mix(in srgb, var(--theme-primary, #c9a227) 24%, transparent);
+}
+
+.coexistir-manager__action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.coexistir-manager__chip {
+  position: fixed;
+  left: 16px;
+  bottom: 96px;
+  z-index: 9000;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--theme-primary, #c9a227) 34%, transparent);
+  background: color-mix(in srgb, var(--theme-bg-dark, #14121a) 92%, transparent);
+  color: var(--theme-text-primary, #e8e2d6);
+  font-size: 0.76rem;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.coexistir-manager__chip-dot {
+  color: var(--theme-primary, #c9a227);
+  font-size: 0.62rem;
+}
+
+.coexistir-manager__chip-pin {
+  font-size: 0.68rem;
+  opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+  .coexistir-manager {
+    left: 8px;
+    right: 8px;
+    bottom: 132px;
+    width: auto;
+    max-height: 40vh;
+  }
+
+  .coexistir-manager__chip {
+    left: 8px;
+    bottom: 132px;
+  }
+}
+
+/* Short viewports (laptops, split screens): keep the card from eating the
+   stage — it is a pinned face, not a takeover. */
+@media (max-height: 720px) {
+  .coexistir-manager {
+    width: min(300px, calc(100vw - 24px));
+    max-height: 38vh;
+    bottom: 78px;
+    padding: 10px;
+    font-size: 0.8rem;
+  }
+
+  .coexistir-manager__body {
+    font-size: 0.8rem;
+  }
+
+  .coexistir-manager__task:nth-child(n + 3) {
+    display: none;
+  }
+}

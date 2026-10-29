@@ -1,0 +1,169 @@
+/**
+ * NameThisVoiceDialog.css — claim dialog styling.
+ */
+
+.name-voice__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9500;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(8, 8, 14, 0.6);
+  padding: 16px;
+}
+
+@media (min-width: 640px) {
+  .name-voice__backdrop {
+    align-items: center;
+  }
+}
+
+.name-voice__panel {
+  width: min(94vw, 440px);
+  max-height: 84vh;
+  overflow-y: auto;
+  background: var(--theme-bg-dark, #1a1a2e);
+  border: 1px solid color-mix(in srgb, var(--theme-primary, #c9a227) 40%, transparent);
+  border-radius: 14px;
+  padding: 14px 16px 16px;
+  box-shadow: 0 12px 60px rgba(0, 0, 0, 0.6);
+  color: var(--theme-text-primary, #e8e2d6);
+}
+
+.name-voice__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.name-voice__title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.name-voice__close {
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.7;
+}
+
+.name-voice__close:hover {
+  opacity: 1;
+}
+
+.name-voice__note {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.name-voice__form {
+  display: flex;
+  gap: 8px;
+}
+
+.name-voice__input {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--theme-primary, #c9a227) 35%, transparent);
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+}
+
+.name-voice__submit {
+  flex-shrink: 0;
+  min-height: 40px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--theme-primary, #c9a227) 45%, transparent);
+  background: color-mix(in srgb, var(--theme-primary, #c9a227) 20%, transparent);
+  color: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+
+.name-voice__submit:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.name-voice__error {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  color: var(--theme-error, #e74c3c);
+}
+
+.name-voice__filed {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  color: var(--theme-warning, #e0a458);
+}
+
+.name-voice__claims {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.name-voice__claims-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+}
+
+.name-voice__claim {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.name-voice__claim-name {
+  font-weight: 600;
+}
+
+.name-voice__claim-by {
+  opacity: 0.65;
+  font-size: 0.78rem;
+  flex: 1;
+}
+
+.name-voice__claim-status {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px dashed currentColor;
+}
+
+.name-voice__claim-status--unverified {
+  color: var(--theme-warning, #e0a458);
+}
+
+.name-voice__claim-status--verified {
+  color: var(--theme-success, #7fce7f);
+  border-style: solid;
+}
+
+.name-voice__empty {
+  font-size: 0.82rem;
+  opacity: 0.6;
+}

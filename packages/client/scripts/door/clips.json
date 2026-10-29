@@ -1,0 +1,42 @@
+{
+  "why": "The behavioural probes replay DETERMINISTIC visitor audio into Chrome's fake capture device, so the whole real path runs (getUserMedia → AudioWorklet → VAD → WAV → Deepgram → /voice/turn → streamed TTS) with only the microphone fixed.",
+  "how_they_were_made": "Deepgram TTS (aura voice), pt-BR, one sentence per clip, then padded with trailing silence so the fake device's loop restart does not bleed into the clip. Regenerate with `node make-clips.mjs --tts --clips=<dir>` if DEEPGRAM_API_KEY is set.",
+  "clips": [
+    {
+      "file": "door-handsfree.wav",
+      "mode": "handsfree, cutoff",
+      "text_pt": "Olá Mara, o que está aberto na lista da casa hoje? / E o que já foi feito hoje na casa?",
+      "note": "Two questions separated by ~9 s of silence, so ONE mic tap yields two complete exchanges."
+    },
+    {
+      "file": "door-bargein.wav",
+      "mode": "bargein",
+      "text_pt": "Olá Mara, o que está aberto na lista da casa hoje? / Espera, e o que já foi feito hoje?",
+      "note": "Second question starts while the first answer is still playing."
+    },
+    {
+      "file": "door-deaf.wav",
+      "mode": "deaf",
+      "text_pt": "Olá Mara, o que está aberto na lista da casa hoje? (repeating)",
+      "note": "A long speech burst to play into a CLOSED device: nothing may be uploaded."
+    },
+    {
+      "file": "door-silence.wav",
+      "mode": "silence, gated",
+      "text_pt": "(room tone only)",
+      "note": "40 s of quiet: the ear stays open and says nothing."
+    },
+    {
+      "file": "door-pause-short.wav",
+      "mode": "pause-short",
+      "text_pt": "E o que já foi feito na casa?",
+      "note": "A ~600 ms pause inside the sentence (shorter than the VAD's 1.2 s timer)."
+    },
+    {
+      "file": "door-pause-long.wav",
+      "mode": "pause-long",
+      "text_pt": "E o que já foi feito ... hoje na casa?",
+      "note": "A ~2 s pause inside the sentence: the VAD sends twice, the page must merge and answer ONCE."
+    }
+  ]
+}
