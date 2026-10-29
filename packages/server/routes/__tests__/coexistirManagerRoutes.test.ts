@@ -4,6 +4,8 @@
  * Contract the client depends on:
  *   GET /api/coexistir/manager/persona -> manager id/name/blurb
  *   GET /api/coexistir/manager/turn    -> { turn, tasks:[open…] }
+ *   GET /api/coexistir/manager/turn?model=nemotron -> polished turn + provider
+ *   GET /api/coexistir/manager/nemotron -> endpoint/model/key-status probe
  *
  * The store and the claim resolver are faked so this proves composition,
  * claim-name addressing and error handling without Mongo or the claims DB.
@@ -125,5 +127,48 @@ describe('GET /api/coexistir/manager/turn', () => {
     const res = await fetch(`${baseUrl}/api/coexistir/manager/turn?intent=briefing`);
     expect(res.status).toBe(500);
     expect((await res.json()).error).toMatch(/manager turn/i);
+  });
+
+  it('keeps the deterministic turn by default (no model param)', async () => {
+    await start({ taskRepo: makeStore(tasks), resolveMemberName: async () => ({}), now: () => morning });
+    const res = await fetch(`${baseUrl}/api/coexistir/manager/turn?intent=todos&language=en`);
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.turn.text).toContain('Buy coffee and Water plants');
+    expect(body.provider).toBeUndefined();
+  });
+
+  it('polishes the composed turn when model=nemotron (injected lane)', async () => {
+    await start({
+      taskRepo: makeStore(tasks),
+      resolveMemberName: async () => ({}),
+      now: () => morning,
+      polishTurn: async (briefing) => ({
+        text: `Polished: ${briefing}`,
+        model: 'test-nemotron',
+        talkerMs: 12,
+        fallback: false,
+      }),
+    });
+    const res = await fetch(`${baseUrl}/api/coexistir/manager/turn?intent=todos&language=en&model=nemotron`);
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.turn.text.startsWith('Polished: ')).toBe(true);
+    expect(body.turn.text).toContain('Buy coffee and Water plants');
+    expect(body.provider).toEqual({ model: 'test-nemotron', talkerMs: 12, fallback: false });
+  });
+});
+
+describe('GET /api/coexistir/manager/nemotron', () => {
+  it('reports the endpoint, model and key status without leaking the key', async () => {
+    await start({ taskRepo: makeStore(tasks), now: () => morning });
+    const res = await fetch(`${baseUrl}/api/coexistir/manager/nemotron`);
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.provider).toBe('nemotron');
+    expect(typeof body.baseUrl).toBe('string');
+    expect(typeof body.model).toBe('string');
+    expect(typeof body.configured).toBe('boolean');
+    expect(JSON.stringify(body)).not.toMatch(/nvapi-/i);
   });
 });

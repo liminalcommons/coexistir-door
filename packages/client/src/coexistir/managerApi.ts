@@ -13,6 +13,8 @@ import { AGENT_REPLY_EVENT } from './agentVoice';
 export type ManagerIntent = 'greeting' | 'briefing' | 'todos' | 'reflection';
 export type ManagerLanguage = 'en' | 'pt';
 
+export type ManagerModel = 'local' | 'nemotron';
+
 export interface ManagerTurn {
   managerId: string;
   managerName: string;
@@ -34,6 +36,7 @@ export interface ManagerOpenTask {
 export interface ManagerTurnResult {
   turn: ManagerTurn;
   tasks: ManagerOpenTask[];
+  provider?: { model: string; talkerMs: number; fallback: boolean };
 }
 
 const API_BASE = '/api/coexistir/manager';
@@ -53,6 +56,8 @@ export async function fetchManagerTurn(args: {
   displayName?: string;
   language?: ManagerLanguage;
   seed?: number;
+  /** `nemotron` polishes the composed turn via the free-tier Nemotron lane. */
+  model?: ManagerModel;
   fetchImpl?: typeof fetch;
 }): Promise<ManagerTurnResult> {
   const doFetch = args.fetchImpl ?? fetch;
@@ -64,6 +69,7 @@ export async function fetchManagerTurn(args: {
       displayName: args.displayName,
       language: args.language,
       seed: args.seed === undefined ? undefined : String(args.seed),
+      model: args.model,
     });
   const res = await doFetch(url);
   if (!res.ok) throw new Error(`Manager unavailable (${res.status})`);
@@ -72,7 +78,11 @@ export async function fetchManagerTurn(args: {
   if (!turn || typeof turn.text !== 'string' || turn.text.trim() === '') {
     throw new Error('Manager returned an empty turn');
   }
-  return { turn, tasks: Array.isArray(body.tasks) ? body.tasks : [] };
+  return {
+    turn,
+    tasks: Array.isArray(body.tasks) ? body.tasks : [],
+    provider: body.provider,
+  };
 }
 
 export interface SpeakTarget {
