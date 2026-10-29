@@ -8,6 +8,22 @@ mocks — when the bridge is down the panels say so.
 Public repo: `https://github.com/liminalcommons/coexistir-door` · MIT license
 (see `LICENSE`; Live2D assets have their own terms below).
 
+## Demo
+
+🎥 **Walkthrough (3 min):** https://youtu.be/2fwz7OTO4Rc — the door, the
+room, the voice label, and the record.
+
+![Mara on stage, debug rail open: PT greeting, honest-unknown voice ID](assets/01-door-hero.jpg)
+
+Session stills (all from live runs against the local rig; no mocks):
+
+| Image | What it shows |
+|---|---|
+| `assets/02-rail-debug.png` | Mara greeting on stage with the `?debug=1` rail open — Voice-ID, Live2D triggers, transcript, event log |
+| `assets/03-voice-id-verified.png` | A verified voice-name claim (Clara, quorum 2/2) — claims, never renames; a single self-claim stays unverified |
+| `assets/04-transcript-pt.png` / `assets/05-transcript-en.png` | The same house-list turn in PT and EN — the door carries words in both languages without inventing them |
+| `assets/06-speaking-transcript.png` | Mara speaking with barge-in allowed, transcript + event log filling the rail |
+
 ## Inspiration
 
 Coexistir is a real intentional community. It runs on the things most
@@ -159,8 +175,8 @@ Install the deps the imports name (`express`, `livekit-server-sdk`,
 4. **Probe the Nemotron lane.** `GET /nemotron` with no key reports the lane
    missing-key; with `NEMOTRON_API_KEY` set, `GET /turn?model=nemotron`
    returns the polished briefing with provider metadata.
-5. [FILL: demo video URL — a three-minute walkthrough showing the door, the
-   room, the voice label, and the record. Not recorded yet.]
+5. **Watch the demo.** https://youtu.be/2fwz7OTO4Rc — a three-minute
+   walkthrough showing the door, the room, the voice label, and the record.
 
 ## Challenges we ran into (portal scope)
 
@@ -194,8 +210,8 @@ Install the deps the imports name (`express`, `livekit-server-sdk`,
 - **Measure the wired Nemotron lane on a real conversation.** Single-turn
   grounded rephrase on the default model is ~0.22–0.26 s TTFT / ~0.36–0.52 s
   total over live NIM; next is latency over a full real conversation.
-- **Ship the demo video.** [FILL: record and link the three-minute
-  walkthrough — door, room, voice label, record.]
+- **Watch the demo video.** https://youtu.be/2fwz7OTO4Rc — door, room,
+  voice label, record.
 - **Use the door at a real gathering.** Compare curated output with verbatim
   and tune thresholds from what people experience, not from a benchmark.
 - **Close the memory loop.** The larger system files turns to per-person
