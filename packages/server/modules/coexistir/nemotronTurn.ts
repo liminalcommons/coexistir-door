@@ -1,17 +1,20 @@
 /**
  * nemotronTurn — the Nemotron polish lane for the front-door manager turn.
  *
- * Design (from the live probe, 2026-10-29, nvidia/nemotron-3-nano-30b-a3b):
+ * Design (live NIM probe, 2026-10-29, nvidia/nemotron-3.5-lightning-30b-a3b):
  * - Ungrounded Nemotron FABRICATES house state (invented shop names/hours),
  *   the exact failure mode the reflex talker guards against. So Nemotron
  *   never answers from scratch: the route composes a deterministic briefing
  *   from real task rows (composeManagerTurn) and Nemotron only REPHRASES it
  *   into one warm spoken sentence, naming every task exactly as written.
- * - Grounded probe: "Bom dia! Ana, temos duas tarefas abertas para a casa:
- *   comprar café e regar as plantas." — both tasks named, nothing added.
- *   TTFT ~0.5-1.1s, total ~0.6-2.6s on hosted Nano 30B. That is NOT the
- *   95ms reflex lane (Groq qwen3.8-27b keeps that); it is the composed-turn
- *   lane, where ~1s is fine because the deterministic text can render first.
+ * - Grounded, reasoning_effort=none: "Bom dia! Ana, temos duas tarefas
+ *   abertas para a casa: comprar café e regar as plantas." — both tasks
+ *   named, nothing added. TTFT ~0.22-0.26s, total ~0.36-0.52s (PT+EN,
+ *   2 trials each, live NIM). With thinking ON the reply never arrives
+ *   (content=null, thinking eats the budget; 16s+), hence reasoning off.
+ *   That is NOT the 95ms reflex lane (Groq qwen3.8-27b keeps that); it is
+ *   the composed-turn lane, where ~0.4s is fine because the deterministic
+ *   text can render first.
  *
  * Free-tier path (no card, no paid signup):
  *   1. Create + verify a free account at https://build.nvidia.com
@@ -29,8 +32,10 @@
 
 import { normalizeLanguage, sanitizeReply } from './reflexTalker';
 
-/** Smallest fast Nemotron on the NIM free tier; also served by mirrors. */
-export const NEMOTRON_DEFAULT_MODEL = 'nvidia/nemotron-3-nano-30b-a3b';
+/** Smallest fast Nemotron on the NIM free tier; also served by mirrors.
+ * (2026-10-29, verified live: `nvidia/nemotron-3-nano-30b-a3b` is EOL since
+ * 2026-09-01 — NIM answers 410 Gone. Successor: 3.5-lightning.) */
+export const NEMOTRON_DEFAULT_MODEL = 'nvidia/nemotron-3.5-lightning-30b-a3b';
 /** NVIDIA-hosted free prototyping endpoint (OpenAI-compatible). */
 export const NEMOTRON_DEFAULT_BASE = 'https://integrate.api.nvidia.com/v1';
 /** Composed-turn lane budget: slower than reflex, still spoken-fast. */
@@ -111,6 +116,10 @@ export async function askNemotron(options: PolishBriefingOptions): Promise<Nemot
         messages: [{ role: 'user', content: polishPrompt(options.briefing, language) }],
         max_tokens: 120,
         temperature: 0.3,
+        // Reasoning model: thinking streams as reasoning_content and eats the
+        // token budget (verified live: content=null, finish=length at 512
+        // tokens with thinking on; 16s TTFT). Off: spoken reply in ~0.4s.
+        reasoning_effort: 'none',
         stream: false,
       }),
       signal: controller.signal,

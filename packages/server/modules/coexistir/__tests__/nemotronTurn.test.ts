@@ -85,4 +85,21 @@ describe('askNemotron', () => {
     expect(out.text).toBe(BRIEFING);
     expect(out.fallback).toBe(true);
   });
+
+  it('sends reasoning_effort=none so the reasoning model answers directly', async () => {
+    let seen: { model: string; reasoning_effort: string } | undefined;
+    const capture = (async (_url: string, init: { body: string }) => {
+      seen = JSON.parse(init.body);
+      return { ok: true, json: async () => ({ choices: [{ message: { content: 'ok' } }] }) };
+    }) as unknown as typeof fetch;
+    await askNemotron({
+      briefing: BRIEFING,
+      language: 'pt',
+      apiKey: 'test-key',
+      baseUrl: 'https://example.invalid/v1',
+      fetchImpl: capture,
+    });
+    expect(seen!.model).toBe(NEMOTRON_DEFAULT_MODEL);
+    expect(seen!.reasoning_effort).toBe('none');
+  });
 });
